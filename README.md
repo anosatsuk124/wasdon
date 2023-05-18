@@ -4,9 +4,9 @@ Yet another WASM-compatible layer for UdonVM (to run WASM/WASI binary on VRChat)
 
 ## Current status
 
-It's working in progress and not ready for use yet.
+This is working in progress and not ready for use yet.
 
-It's currently focused on developing as an **AOT binary translator** for UdonVM to support full compatibility with WASI/WASM.
+It's currently focused on developing an **AOT binary translator** to Udon Assembly (its text representation) to support full compatibility with WASI/WASM.
 
 ## Roadmap
 
