@@ -1,0 +1,28 @@
+[package]
+name = "wasdon"
+version = "0.1.0"
+edition = "2021"
+authors = ["Satsuki Akiba <anosatsuk124@gmail.com>"]
+description = """
+Yet another WASM-compatible layer for UdonVM (to run WASM/WASI binary on VRChat).
+"""
+license = "Apache-2.0 WITH LLVM-exception"
+default-run = "wasdon"
+autobins = false
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+proc-macro = true
+
+[[bin]]
+name = "wasdon"
+path = "src/bin/translator/main.rs"
+
+[dependencies]
+anyhow = { version = "1.0.71", default-features = false }
+proc-macro2 = "1.0.58"
+quote = "1.0.27"
+syn = "2.0.16"
+wasmparser-nostd = "0.100.1"
+
