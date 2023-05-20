@@ -18,15 +18,15 @@ pub enum UasmCodeSection {
 }
 
 /// the map of code labels and their code blocks
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct UasmCode(HashMap<UasmCodeLabel, UasmCodeBlock>);
 
 /// the label of a code block
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct UasmCodeLabel(String);
 
 /// the code block of a code section
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct UasmCodeBlock {
     instructions: Vec<UasmInstruction>,
 }
@@ -57,18 +57,18 @@ pub struct UasmDataSection {
 }
 
 /// the data section of Udon Assembly
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct UasmData {
     attributes: UasmDataAttribute,
     variables: UasmVariable,
 }
 
 /// the variables of a data section
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct UasmVariable(HashMap<UasmVarName, UasmTypedValue>);
 
 /// the name of a variable
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct UasmVarName(String);
 
 /// the typped value of a variable
