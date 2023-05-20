@@ -1,4 +1,4 @@
 pub mod codegen;
-pub mod uasm;
+pub mod data;
 
-pub use uasm::Uasm;
+pub use data::Uasm;
