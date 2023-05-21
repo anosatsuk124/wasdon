@@ -58,3 +58,11 @@ impl<T> Deref for Units<T> {
         &self.0
     }
 }
+
+impl<T> Iterator for Units<T> {
+    type Item = Unit<T>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0.pop()
+    }
+}

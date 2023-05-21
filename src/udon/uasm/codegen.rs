@@ -1,6 +1,6 @@
 use ::alloc::string::String;
 
-use crate::core::{Unit, Units};
+use crate::core::{InterpretableAs, Unit, Units};
 
 use super::Uasm;
 
