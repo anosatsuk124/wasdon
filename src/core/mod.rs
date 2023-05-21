@@ -23,6 +23,7 @@ where
     }
 }
 
+#[derive(Debug)]
 pub enum Unit<T> {
     GlobalUnit { data: T },
     NonGlobalUnit { data: T },
@@ -37,6 +38,7 @@ impl<T> Unit<T> {
     }
 }
 
+#[derive(Debug)]
 pub struct Units<T>(pub Vec<Unit<T>>);
 
 impl<T> Units<T> {

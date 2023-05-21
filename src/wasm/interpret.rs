@@ -8,6 +8,7 @@ use ::alloc::boxed::Box;
 use ::alloc::format;
 use ::alloc::string::String;
 
+#[derive(Debug)]
 pub struct ParsedData<T> {
     data: T,
     next: Option<Box<ParsedData<T>>>,
@@ -18,8 +19,10 @@ impl<T> ParsedData<T> {
         ParsedData { data, next: None }
     }
 
-    pub fn update(&mut self, new: Self) {
-        self.next = Some(Box::new(new));
+    pub fn update(self, mut new: Self) -> Self {
+        new.next = Some(Box::new(self));
+
+        new
     }
 
     pub fn get_data(&self) -> &T {
@@ -134,7 +137,7 @@ impl<'a> From<wasmparser::OperatorsIterator<'a>> for ParsedData<wasmparser::Oper
         for value in value_iter {
             let value = value.unwrap();
 
-            parsed_data.update(ParsedData::new(value));
+            parsed_data = parsed_data.update(ParsedData::new(value));
         }
 
         parsed_data

@@ -16,9 +16,9 @@ impl WasmEntry<'_> {
 impl<'a> From<WasmEntry<'a>> for WasmParser<'a> {
     fn from(wasm_entry: WasmEntry<'a>) -> Self {
         let wasmparser = wasmparser::Parser::new(wasm_entry.offset);
-        let eof = false;
+        let eof = true;
 
-        WasmParser {
+        Self {
             wasm_entry: Box::new(wasm_entry),
             parser: wasmparser,
             eof,
@@ -46,7 +46,7 @@ where
                 Ok(parsed) => match parsed {
                     wasmparser::Chunk::Parsed { consumed, payload } => (consumed, payload),
                     wasmparser::Chunk::NeedMoreData(hint) => {
-                        return Err(anyhow::anyhow!("Failed to parse wasm file: {}", hint));
+                        unreachable!("Unexpected Error: need more data. Hint: {}", hint)
                     }
                 },
                 Err(err) => {
@@ -55,7 +55,10 @@ where
             }
         };
 
+        log::info!("Consumed {} bytes", consumed);
         self.head_position += consumed;
+
+        log::info!("Payload: {:?}", payload);
 
         Ok(payload)
     }
@@ -64,8 +67,13 @@ where
         let mut current = ParsedData::new(self.parse()?);
         let mut next = self.parse()?;
 
-        while let wasmparser::Payload::End(_) = next {
-            current.update(ParsedData::new(next));
+        loop {
+            if let wasmparser::Payload::End(_) = next {
+                log::info!("End of payload");
+                break;
+            }
+            log::info!("Update with: {:?}", &next);
+            current = current.update(ParsedData::new(next));
             next = self.parse()?;
         }
 
