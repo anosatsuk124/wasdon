@@ -60,7 +60,7 @@ where
         Ok(payload)
     }
 
-    pub fn parse_all(&mut self) -> anyhow::Result<ParsedData<'a>> {
+    pub fn parse_all(&mut self) -> anyhow::Result<ParsedData<wasmparser::Payload>> {
         let mut current = ParsedData::new(self.parse()?);
         let mut next = self.parse()?;
 
