@@ -119,7 +119,7 @@ fn interpret_global_section(
             variable: UasmVariable::new(var_name, var_type),
         };
 
-        data_section.push_data(uasm_data);
+        data_section.push_data(&uasm_data);
     }
 
     Ok(Unit::GlobalUnit {

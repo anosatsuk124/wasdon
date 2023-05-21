@@ -3,8 +3,6 @@ use ::alloc::{
     string::{String, ToString},
     vec::Vec,
 };
-use ::core::ops::Deref;
-use alloc::boxed::Box;
 use alloc::format;
 use hashbrown::HashMap;
 
@@ -234,7 +232,6 @@ impl UasmInstruction {
 /// Udon Assembly opcode
 #[derive(Debug, Clone)]
 pub enum UasmOpcode {
-    // TODO: Define all opcodes
     Nop,
     Push(UasmVarName),
     Pop,
@@ -295,8 +292,8 @@ impl UasmDataSection {
         UasmDataSection { data: Vec::new() }
     }
 
-    pub fn push_data(&mut self, data: UasmData) {
-        self.data.push(data);
+    pub fn push_data(&mut self, data: &UasmData) {
+        self.data.push(data.clone());
     }
 
     pub fn get_data(&self) -> &Vec<UasmData> {
@@ -305,7 +302,7 @@ impl UasmDataSection {
 }
 
 /// the data section of Udon Assembly
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UasmData {
     pub attribute: UasmDataAttribute,
     pub variable: UasmVariable,
@@ -322,7 +319,7 @@ impl UasmData {
 }
 
 /// the variables of a data section
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UasmVariable {
     pub name: UasmVarName,
     pub ty: UasmType,
@@ -351,7 +348,7 @@ impl UasmVarName {
 }
 
 /// the typped value of a variable
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UasmType {
     Int32,
     Int64,
@@ -392,7 +389,7 @@ impl TryFrom<wasmparser::ValType> for UasmType {
 }
 
 /// the attributes of a data section
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub enum UasmDataAttribute {
     /// the data section with no attribute
     #[default]
@@ -416,7 +413,7 @@ impl ToString for UasmDataAttribute {
 }
 
 /// the variation of a sync attribute
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub enum UasmDataAttributeSync {
     #[default]
     None,
