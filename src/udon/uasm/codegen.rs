@@ -28,10 +28,10 @@ impl Into<Uasm> for Units<Uasm> {
                     } else {
                         continue;
                     };
-                    if uasm.data_section.is_some() {
-                        // TODO:
+                    let uasm_data_section = &mut uasm.data_section;
+                    if uasm_data_section.is_some() {
                         data_section.get_data().iter().for_each(|data| {
-                            uasm.data_section.unwrap().push_data(&data);
+                            uasm_data_section.as_mut().unwrap().push_data(&data);
                         });
                     } else {
                         uasm.set_data_section(data_section);

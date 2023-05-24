@@ -163,8 +163,8 @@ impl InterpretableAs<Uasm> for ParsedData<wasmparser::Payload<'_>> {
 
         match self.get_data() {
             Payload::GlobalSection(global_section) => interpret_global_section(global_section),
-            _ => {
-                unimplemented!()
+            x => {
+                unimplemented!("Unknown payload: {:?}", x)
             }
         }
     }
