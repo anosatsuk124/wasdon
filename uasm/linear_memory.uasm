@@ -1,0 +1,26 @@
+.data_start
+  _stack: %SystemObjectArray, null
+  _stack_length: %SystemInt32, 10
+  _a: %SystemInt32, 0
+  _0_index: %SystemInt32, 0
+  _result: %SystemObject, null
+.data_end
+
+.code_start
+  .export _start
+  _start:
+    PUSH, _stack_length
+    PUSH, _stack
+    EXTERN, "SystemObjectArray.__ctor__SystemInt32__SystemObjectArray"
+    PUSH, _stack
+    PUSH, _a
+    PUSH, _0_index
+    EXTERN, "SystemObjectArray.__SetValue__SystemObject_SystemInt32__SystemVoid"
+    PUSH, _stack
+    PUSH, _0_index
+    PUSH, _result
+    EXTERN, "SystemObjectArray.__GetValue__SystemInt32__SystemObject"
+    PUSH, _result
+    EXTERN, "UnityEngineDebug.__Log__SystemObject__SystemVoid"
+.code_end
+
