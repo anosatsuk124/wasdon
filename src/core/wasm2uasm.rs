@@ -1,36 +1,26 @@
-use crate::core::{InterpretableAs, Unit};
+use crate::core::InterpretableAs;
+use crate::core::ParsedData;
+use crate::udon::uasm::data::UasmInstruction;
 use crate::udon::uasm::data::{
-    UasmCode, UasmCodeBlock, UasmCodeLabel, UasmCodeSection, UasmData, UasmDataAttribute,
-    UasmDataSection, UasmInstruction, UasmType, UasmVarName, UasmVariable,
+    UasmCode, UasmCodeLabel, UasmData, UasmDataAttribute, UasmDataSection, UasmType, UasmVarName,
+    UasmVariable,
 };
 use crate::udon::uasm::Uasm;
-use ::alloc::boxed::Box;
 use ::alloc::format;
+
 use ::alloc::string::String;
 
-#[derive(Debug)]
-pub struct ParsedData<T> {
-    data: T,
-    next: Option<Box<ParsedData<T>>>,
-}
+impl InterpretableAs<UasmInstruction> for ParsedData<wasmparser::Operator<'_>> {
+    fn interpret(&self) -> anyhow::Result<UasmInstruction> {
+        use wasmparser::Operator;
 
-impl<T> ParsedData<T> {
-    pub fn new(data: T) -> ParsedData<T> {
-        ParsedData { data, next: None }
-    }
-
-    pub fn update(self, mut new: Self) -> Self {
-        new.next = Some(Box::new(self));
-
-        new
-    }
-
-    pub fn get_data(&self) -> &T {
-        &self.data
-    }
-
-    pub fn get_next(&self) -> Option<&ParsedData<T>> {
-        Some(self.next.as_ref()?)
+        match self.get_data() {
+            // TODO: implement all instructions
+            // Operator::Nop => Ok(UasmInstruction::new(UasmOpcode::Nop)),
+            _ => {
+                todo!()
+            }
+        }
     }
 }
 
@@ -39,16 +29,6 @@ impl TryInto<Uasm> for ParsedData<wasmparser::Payload<'_>> {
 
     fn try_into(self) -> Result<Uasm, Self::Error> {
         unimplemented!()
-    }
-}
-
-impl<T> Iterator for ParsedData<T> {
-    type Item = ParsedData<T>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let next = self.next.take()?;
-
-        Some(*next)
     }
 }
 
@@ -77,7 +57,7 @@ pub fn generate_variable_name(info: VarInfo) -> String {
 
 fn interpret_global_section(
     global_section: &wasmparser::SectionLimited<'_, wasmparser::Global>,
-) -> anyhow::Result<Unit<Uasm>> {
+) -> anyhow::Result<Uasm> {
     let mut data_section = UasmDataSection::new();
 
     let mut code = UasmCode::new();
@@ -122,9 +102,7 @@ fn interpret_global_section(
         data_section.push_data(&uasm_data);
     }
 
-    Ok(Unit::GlobalUnit {
-        data: Uasm::new(Some(data_section), None),
-    })
+    Ok(Uasm::new(Some(data_section), None))
 }
 
 impl<'a> From<wasmparser::OperatorsIterator<'a>> for ParsedData<wasmparser::Operator<'a>> {
@@ -144,21 +122,8 @@ impl<'a> From<wasmparser::OperatorsIterator<'a>> for ParsedData<wasmparser::Oper
     }
 }
 
-impl InterpretableAs<UasmInstruction> for ParsedData<wasmparser::Operator<'_>> {
-    fn interpret(&self) -> anyhow::Result<Unit<UasmInstruction>> {
-        use wasmparser::Operator;
-
-        match self.get_data() {
-            // TODO: implement all instructions
-            _ => {
-                todo!()
-            }
-        }
-    }
-}
-
 impl InterpretableAs<Uasm> for ParsedData<wasmparser::Payload<'_>> {
-    fn interpret(&self) -> anyhow::Result<Unit<Uasm>> {
+    fn interpret(&self) -> anyhow::Result<Uasm> {
         use wasmparser::Payload;
 
         match self.get_data() {

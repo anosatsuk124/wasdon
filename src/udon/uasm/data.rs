@@ -203,7 +203,7 @@ impl From<Units<UasmInstruction>> for UasmCodeBlock {
         let mut block = UasmCodeBlock::new();
 
         for unit in units.iter() {
-            let instruction = unit.get_data();
+            let instruction = unit;
             block.push_instruction(instruction);
         }
 

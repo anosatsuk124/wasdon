@@ -1,4 +1,4 @@
-use super::interpret::ParsedData;
+use crate::core::ParsedData;
 use ::alloc::boxed::Box;
 
 #[derive(Debug, Default)]
