@@ -23,7 +23,6 @@ path = "src/bin/translator/main.rs"
 resolver = "2"
 members = [
   "fuzz",
-  "crates/parser-implementer-macro",
 ]
 
 [workspace.dependencies]

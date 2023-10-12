@@ -1,7 +1,5 @@
 use std::{fs::File, io::Read};
 
-use wasdon::{core::InterpretableAs, udon::uasm::Uasm};
-
 fn main() -> anyhow::Result<()> {
     #[cfg(feature = "std")]
     drop(env_logger::try_init());
@@ -19,21 +17,6 @@ fn main() -> anyhow::Result<()> {
         .unwrap()
         .read_to_end(&mut wasm)
         .unwrap();
-
-    let wasm_entry = wasdon::wasm::parser::WasmEntry::new(wasm.as_slice(), 0);
-
-    let mut wasm_parser = wasdon::wasm::parser::WasmParser::from(wasm_entry);
-
-    log::info!("data: {:x?}", &wasm);
-    log::info!("data size: {:?}", &wasm.len());
-
-    let mut parsed_data = wasm_parser.parse_all()?;
-
-    log::info!("{:?}", &parsed_data);
-
-    let uasm_units = parsed_data.interpret_all()?;
-
-    log::info!("Units<Uasm>: {:?}", &uasm_units);
 
     Ok(())
 }
